@@ -144,7 +144,7 @@
     { "key": "recording_id", "type": "integer", "events": ["$tf_recording_started", "$tf_recording_paused", "$tf_recording_resumed", "$tf_recording_ended", "$tf_session_start"], "description": "Added by Testing Floor when the recording already exists." }
   ],
   "sdk_events": [
-    { "name": "player_moved", "description": "Optional, off by default. Debounced movement samples with player and camera pose; the main input for player-position heatmaps and paths." },
+    { "name": "player_moved", "description": "On by default once the game supplies a player or camera position. Debounced movement samples, up to ten a second, with player and camera pose; the main input for player-position heatmaps and paths." },
     { "name": "player_teleported", "description": "Sent by the SDK's teleport helpers so paths break at the jump." }
   ],
   "tracked_object_fields": [

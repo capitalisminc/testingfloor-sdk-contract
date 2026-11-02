@@ -248,9 +248,12 @@ are session state. Missing sources omit their fields. Native camera Euler
 conventions differ; use `camera.forward` and the map's configured axes for
 spatial projection.
 
-Movement defaults off. Opting in emits debounced `player_moved` events for
-player movement or camera-only position, rotation, FOV and orthographic width
-changes. Reasons are `start`, `ping`, and `stop`. Ping metrics cover the segment
+Movement defaults on. Once the game supplies a player or camera sample, the SDK
+emits debounced `player_moved` events for player movement or camera-only
+position, rotation, FOV and orthographic width changes, and a game can turn
+them off. Pings come at most every 0.1 seconds by default, so a half-second
+jump gets several samples; a game may raise the interval to send fewer. Reasons
+are `start`, `ping`, and `stop`. Ping metrics cover the segment
 since the previous ping; stop metrics cover the whole run. Zero movement must
 remain still, even when a threshold is zero. Sampling and QR timing continue
 while gameplay pauses.
@@ -262,8 +265,8 @@ emitting a teleport event.
 
 ## Safe defaults
 
-Collection requires a write key. Ordinary editor collection, movement events, and
-QR markers default off. Automated engine tests cannot enable live collection or
+Collection requires a write key. Ordinary editor collection and QR markers
+default off. Automated engine tests cannot enable live collection or
 markers, including through a force-QR override. Do not put personal data, write
 keys, or other credentials in event properties or public examples.
 
