@@ -115,6 +115,35 @@ barrier. An empty participant list with no such runs means the recording has no
 telemetry. Crashes or failed shutdown flushes can leave a participant without a
 marker; consumers must use a bounded timeout and preserve the incomplete status.
 
+## Browser games
+
+A game running in a web page cannot read launch arguments, files or an editor
+sidecar, so its recording handoff and recording state reach it over the web.
+
+- When Testing Floor opens a browser game for a recording, it adds the recording
+  to the game's URL. The desktop app adds the query parameters
+  `tf_recording_uuid` and `tf_suppress_qr`. A `#testing-floor=<JSON>` fragment,
+  holding the same fields as the launch argument, wins over them. The SDK keeps
+  the handoff in the tab's session storage, so reloading the tab keeps the
+  recording, and removes the fragment from the address bar.
+- The SDK reads the recording's state with `POST
+  https://api.testingfloor.com/telemetry/recording_state`, sending
+  `{"$write_key": "...", "recording_uuid": "..."}` as `text/plain` so the
+  browser skips a preflight. An open recording answers `"closed": false` with a
+  `lease_expires_at_unix_ms` 20 seconds ahead and `"state"` `recording` or
+  `paused`. A closed one answers `"closed": true`. An unknown one answers 404.
+- The SDK polls about every 5 seconds while a recording is attached and uses the
+  answers as a desktop SDK uses the lease and `closed.json`: a lease that runs out
+  suspends the association and marks an interruption, and `"closed": true`
+  completes it. Until the first answer, and for a recording the endpoint does not
+  know, events carry the recording without a lease.
+- A browser run does not register and writes no status file. Consumers find it
+  by the recording UUID on its events.
+- The SDK completes the run when the page is hidden for good (`pagehide`) and
+  hands what is still queued to `sendBeacon`.
+- `$tf.os` is `Web`. `$tf.engine` is the game's framework and version when the
+  game supplies it.
+
 ## Event capture and properties
 
 Event name, UUID, UTC timestamp, play session, recording, and context are captured
