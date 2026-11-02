@@ -7,7 +7,7 @@
     "method": "POST",
     "url": "https://dataentry.testingfloor.com/v1/batch",
     "content_type": "application/json",
-    "acknowledgement": "The collector answers 2xx only after the batch is written to the warehouse. Retry network failures, 408, 429 and 5xx with the same event IDs. 401 and 403 mean the telemetry key was refused. Other 4xx responses reject an invalid batch."
+    "acknowledgement": "The collector answers 2xx only after the batch is written to the warehouse. Retry network failures, 408, 429 and 5xx with the same event IDs. 401 and 403 mean the analytics write key was refused. Other 4xx responses reject an invalid batch."
   },
   "limits": [
     { "key": "event_bytes", "value": 32768, "description": "Largest serialized event the collector accepts." },
@@ -27,7 +27,7 @@
     ]
   },
   "request_fields": [
-    { "key": "$write_key", "required": true, "type": "string", "description": "The game's telemetry key for the environment being tested. It is not an account API key." },
+    { "key": "$write_key", "required": true, "type": "string", "description": "The game's analytics write key for the environment being tested. It is not an account API key." },
     { "key": "$sent_at", "required": false, "type": "timestamp", "description": "When the client sent the request, as an ISO 8601 time in UTC. Either a Z suffix or a +00:00 offset is accepted." },
     { "key": "events", "required": true, "type": "object[]", "description": "The events in this request, each with the event fields below." }
   ],
