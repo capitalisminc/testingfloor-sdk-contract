@@ -102,7 +102,7 @@
     { "key": "camera.focus.z", "type": "number", "set_by": "sdk", "status": "current", "unit": "engine units", "description": "Point at the center of the view." },
     { "key": "camera.projection", "type": "string", "set_by": "sdk", "status": "current", "description": "Session state: perspective or orthographic." },
     { "key": "camera.fov", "type": "number", "set_by": "sdk", "status": "current", "unit": "degrees", "description": "Field of view of a perspective camera." },
-    { "key": "camera.fov_axis", "type": "string", "set_by": "sdk", "status": "current", "description": "Session state: vertical in Unity, horizontal in Unreal." },
+    { "key": "camera.fov_axis", "type": "string", "set_by": "sdk", "status": "current", "description": "Session state: vertical in Unity and Godot, horizontal in Unreal." },
     { "key": "camera.ortho_width", "type": "number", "set_by": "sdk", "status": "current", "unit": "engine units", "description": "Width of an orthographic camera's view, edge to edge. Sent instead of camera.fov." },
     { "key": "viewport.width", "type": "integer", "set_by": "sdk", "status": "current", "unit": "pixels", "description": "Session state: width of the game view." },
     { "key": "viewport.height", "type": "integer", "set_by": "sdk", "status": "current", "unit": "pixels", "description": "Session state: height of the game view." },

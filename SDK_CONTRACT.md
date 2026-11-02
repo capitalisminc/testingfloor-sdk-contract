@@ -31,8 +31,11 @@ contract is authoritative.
   Track meaningful gameplay events such as `level_started` yourself.
 - The current handoff is `--testing-floor={"recording_uuid":"example-recording"}`.
   Optional fields are `playtest_id`, `suppress_qr` (defaults true), and `created_at_unix_ms`.
-- Editor sidecars are `Library/TestingFloor/recording-payload.json` for Unity and
-  `Saved/TestingFloor/recording-payload.json` for Unreal. The recorder owns their lifetime.
+- Editor sidecars are `Library/TestingFloor/recording-payload.json` for Unity,
+  `Saved/TestingFloor/recording-payload.json` for Unreal and
+  `.godot/TestingFloor/recording-payload.json` for Godot. The recorder owns their lifetime.
+  Godot runs Play from the editor in a separate process, so its handoff is
+  project-scoped and `editor_pid` is not compared.
 - A versioned recording lease sidecar supersedes the launch argument, including
   when its lease has expired, so expiry cannot revive an old launch association.
   Otherwise a valid launch argument takes precedence over a legacy sidecar.
@@ -196,14 +199,14 @@ can lose events. Pending and dropped counters provide local diagnostics.
 
 ## Spatial data and activity
 
-| Value | Unity | Unreal |
-| --- | --- | --- |
-| Position / teleport endpoints | Native meters | Native centimeters |
-| Movement thresholds and scalar distances | Meters | Meters |
-| Angles and rotation metrics | Degrees | Degrees |
-| `camera.fov_axis` | `vertical` | `horizontal` |
-| Default map plane | X/Z | X/Y |
-| Default world units per meter | 1 | 100 |
+| Value | Unity | Unreal | Godot |
+| --- | --- | --- | --- |
+| Position / teleport endpoints | Native meters | Native centimeters | Native meters in 3D; pixels in 2D, with Z 0 |
+| Movement thresholds and scalar distances | Meters | Meters | Meters |
+| Angles and rotation metrics | Degrees | Degrees | Degrees |
+| `camera.fov_axis` | `vertical` | `horizontal` | `vertical` |
+| Default map plane | X/Z | X/Y | X/Z in 3D, X/Y in 2D |
+| Default world units per meter | 1 | 100 | 1 |
 
 Every available player or camera sample attaches `player.position.*`,
 `camera.position.*`, `camera.euler.*`, `camera.forward.*` and `camera.up.*` to
@@ -238,8 +241,8 @@ keys, or other credentials in event properties or public examples.
 QR payloads use `tfqr://sync/v1?s=<play-session-id>&t=<unix-ms>&q=<sequence>`.
 Defaults are a 15-second interval, continuous visibility, inverted colors, and a
 four-module quiet zone. Recorder suppression hides the marker unless explicitly
-overridden; `--forceqr` and `-forceqr` are recognized. Unity supplies the overlay;
-Unreal supplies marker pixels for the host game's UI.
+overridden; `--forceqr` and `-forceqr` are recognized. Unity and Godot supply the
+overlay; Unreal supplies marker pixels for the host game's UI.
 
 ## Schema 2: session state and tracked objects
 
